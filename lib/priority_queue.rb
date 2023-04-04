@@ -3,47 +3,43 @@ class PriorityQueue
   attr_accessor :q, :keys
   def initialize
     @q = Hash.new {|hash, key| hash[key] = [] }
-    @keys = [-Float::INFINITY, Float::INFINITY]
+    @keys = []
     @empty = true
   end
 
   def insert(item, priority)
     q[priority] << item
-    ndx = keys.bsearch_index{|key| key >= priority } || -1
+    ndx = keys.bsearch_index{|key| priority >= key } || -1
     keys.insert(ndx, priority) if priority != keys[ndx]
     @empty = false
   end
 
   def pull_highest
-    highest_key_posn = -2
-    key = keys[highest_key_posn]
-    if key == -Float::INFINITY
+    if keys.empty?
       @empty = true
-      item = nil
+      nil
     else
-      item = get_item(key, highest_key_posn)
+      get_item(keys.first, 0)
     end
-    item
   end
 
   def pull_lowest
-    lowest_key_posn = 1
-    key = keys[lowest_key_posn]
-    if key == Float::INFINITY
+    if keys.empty?
       @empty = true
-      item = nil
+      nil
     else
-      item = get_item(key, lowest_key_posn)
+      get_item(keys.last, -1)
     end
-    item
   end
 
   def find_max
-    q[keys[-2]].last
+    return nil if empty?
+    q[keys.first].first
   end
 
   def find_min
-    q[keys[1]].last
+    return nil if empty?
+    q[keys.last].first
   end
 
   def empty?
