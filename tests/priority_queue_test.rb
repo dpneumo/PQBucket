@@ -9,7 +9,7 @@ class PriorityQueueTest < Minitest::Test
   end
 
   def test_inits_maxkey_to_array_holding_neg_infinity
-    assert_equal [], @pq.keys
+    assert_equal [], @pq.priorities
   end
 
   def test_inits_q_to_an_empty_hash
@@ -25,7 +25,7 @@ class PriorityQueueTest < Minitest::Test
     @pq.insert("b", 5)
     expected = { 5 => ["b"] }
     assert_equal expected, @pq.q
-    assert_equal [5], @pq.keys
+    assert_equal [5], @pq.priorities
     assert_equal false, @pq.empty?
   end
 
@@ -39,7 +39,7 @@ class PriorityQueueTest < Minitest::Test
     @pq.insert('q', 10)
     expected = {2=>["b"], 5=>["x"], 6=>["y"], 0=>["a"], 3=>["z","w"], 10=>["q"]}
     assert_equal expected, @pq.q
-    assert_equal [10, 6, 5, 3, 2, 0], @pq.keys
+    assert_equal [10, 6, 5, 3, 2, 0], @pq.priorities
   end
 
   def test_correctly_pulls_highest_items_returning_nil_when_empty
@@ -126,5 +126,29 @@ class PriorityQueueTest < Minitest::Test
   def test_returns_nil_for_empty_queue
     assert_nil @pq.pull_highest
     assert_equal true, @pq.empty?
+  end
+
+  def test_finds_items_by_priority
+    @pq.insert('b', 2)
+    @pq.insert('z', 3)
+    @pq.insert('w', 3)
+    @pq.insert('r', 10)
+    assert_equal ["z", "w"], @pq.find_by_priority(3)
+  end
+
+  def test_finds_item_by_label_and_priority
+    @pq.insert('b', 2)
+    @pq.insert('z', 3)
+    @pq.insert('w', 3)
+    @pq.insert('r', 10)
+    assert_equal "w", @pq.find_by_label_and_priority('w', 3)
+  end
+
+  def test_finds_item_by_label
+    @pq.insert('b', 2)
+    @pq.insert('z', 3)
+    @pq.insert('w', 3)
+    @pq.insert('r', 10)
+    assert_equal "z", @pq.find_by_label('z')
   end
 end
