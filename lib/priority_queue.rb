@@ -1,53 +1,48 @@
 class PriorityQueue
   # This is basically a bucket queue
-  attr_accessor :q, :priorities
+  attr_accessor :q, :items, :priorities
   def initialize
-    @q = Hash.new {|hash, priority| hash[priority] = [] } # hash values: lists of items
+    @items = [] # maintain as an ordered list of unique items
     @priorities = [] # maintain as an ordered list
-    @empty = true
+    @q = Hash.new {|hash, priority| hash[priority] = [] } # hash values: lists of indexes into items
   end
 
   def insert(item, priority)
-    q[priority] << item
+    items << item if ! items.include? item
+    q[priority] << (items.size - 1)
     ndx = priorities.bsearch_index{|p| priority >= p } || -1
     priorities.insert(ndx, priority) if priority != priorities[ndx]
-    @empty = false
   end
 
   def pull_highest
-    if priorities.empty?
-      @empty = true
-      nil
-    else
-      pull_item(priorities.first, 0)
-    end
+    empty? ? nil : pull_item(priorities.first)
   end
 
   def pull_lowest
-    if priorities.empty?
-      @empty = true
-      nil
-    else
-      pull_item(priorities.last, -1)
-    end
+    empty? ? nil : pull_item(priorities.last)
   end
 
   def find_max
     return nil if empty?
-    q[priorities.first].first
+    max_priority_ndx = q[priorities.first].first
+    items[max_priority_ndx]
   end
 
   def find_min
     return nil if empty?
-    q[priorities.last].first
+    min_priority_ndx = q[priorities.last].last
+    items[min_priority_ndx]
   end
 
   def find_by_priority(priority)
-    q[priority]
+    q[priority].map {|ndx| items[ndx] }
   end
 
   def find_by_label_and_priority(label, priority)
-    q[priority].select {|itm| itm.to_s == label }.first
+    q[priority].reduce([]) do |selections, ndx|
+      selections << items[ndx] if items[ndx].to_s == label
+      selections
+    end.first
   end
 
   def find_by_label(label)
@@ -59,15 +54,16 @@ class PriorityQueue
   end
 
   def empty?
-    @empty
+    priorities.empty?
   end
 
 private
-  def pull_item(priority, priority_posn)
-    item = q[priority].shift
+  def pull_item(priority)
+    item_ndx = q[priority].shift
+    item = items[item_ndx]
     if q[priority].empty?
       q.delete(priority)
-      priorities.delete_at(priority_posn)
+      priorities.delete(priority)
     end
     item
   end
