@@ -137,6 +137,14 @@ class PriorityQueueTest < Minitest::Test
     assert_equal ["z", "w"], @pq.find_by_priority(3)
   end
 
+  def test_finds_by_priority_returns_empty_array_if_items_not_found
+    @pq.insert('b', 2)
+    @pq.insert('z', 3)
+    @pq.insert('w', 3)
+    @pq.insert('r', 10)
+    assert_equal [], @pq.find_by_priority(4)
+  end
+
   def test_finds_item_by_label_and_priority
     @pq.insert('b', 2)
     @pq.insert('z', 3)
@@ -145,11 +153,27 @@ class PriorityQueueTest < Minitest::Test
     assert_equal "w", @pq.find_by_label_and_priority('w', 3)
   end
 
-  def nottest_finds_item_by_label
+  def test_finds_by_label_and_priority_returns_nil_if_item_not_found
+    @pq.insert('b', 2)
+    @pq.insert('z', 3)
+    @pq.insert('w', 3)
+    @pq.insert('r', 10)
+    assert_nil @pq.find_by_label_and_priority('a', 3)
+  end
+
+  def test_finds_item_by_label
     @pq.insert('b', 2)
     @pq.insert('z', 3)
     @pq.insert('w', 3)
     @pq.insert('r', 10)
     assert_equal "z", @pq.find_by_label('z')
+  end
+
+  def test_find_by_label_returns_nil_if_label_not_found
+    @pq.insert('b', 2)
+    @pq.insert('z', 3)
+    @pq.insert('w', 3)
+    @pq.insert('r', 10)
+    assert_nil @pq.find_by_label('a')
   end
 end

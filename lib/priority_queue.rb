@@ -46,11 +46,12 @@ class PriorityQueue
   end
 
   def find_by_label(label)
-    q.each do |_, items|
-      candidates = items.select {|itm| itm.to_s == label }
-      next if candidates.empty?
-      return candidates.first
+    q.each do |_, ndxs|
+      candidate_ndxs = (ndxs.select {|ndx| items[ndx].to_s == label })
+      next if candidate_ndxs.empty?
+      return items[candidate_ndxs.first]
     end
+    nil
   end
 
   def empty?
