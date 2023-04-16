@@ -1,5 +1,6 @@
 class PriorityQueue
   # This is basically a bucket queue
+  # All items in the queue are unique
   attr_accessor :items, :priorities, :q
   def initialize
     @items = [] # maintain as an ordered list of unique items

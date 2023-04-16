@@ -2,7 +2,7 @@ require 'benchmark'
 require_relative '../lib/priority_queue'
 MaxPriority = 100
 SampleSize = 100
-LabelCharSize = 4
+LabelCharSize = 2
 max_lbl = LabelCharSize.times.map {|i| 'z' }.join
 mid_lbl = LabelCharSize.times.map {|i| 'm' }.join
 
