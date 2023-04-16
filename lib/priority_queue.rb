@@ -1,6 +1,6 @@
 class PriorityQueue
   # This is basically a bucket queue
-  attr_accessor :q, :items, :priorities
+  attr_accessor :items, :priorities, :q
   def initialize
     @items = [] # maintain as an ordered list of unique items
     @priorities = [] # maintain as an ordered list
@@ -15,57 +15,63 @@ class PriorityQueue
   end
 
   def pull_highest
-    empty? ? nil : pull_item(priorities.first)
+    pull_item(priorities.first)
   end
 
   def pull_lowest
-    empty? ? nil : pull_item(priorities.last)
+    pull_item(priorities.last)
   end
 
-  def find_max
+  def find_highest
     return nil if empty?
     max_priority_ndx = q[priorities.first].first
     items[max_priority_ndx]
   end
 
-  def find_min
+  def find_lowest
     return nil if empty?
     min_priority_ndx = q[priorities.last].last
     items[min_priority_ndx]
   end
 
   def find_by_priority(priority)
-    q[priority].map {|ndx| items[ndx] }
+    q[priority].map {|ndx| items[ndx] }.first
   end
 
   def find_by_label_and_priority(label, priority)
-    q[priority].reduce([]) do |selections, ndx|
-      selections << items[ndx] if items[ndx].to_s == label
-      selections
+    q[priority].reduce([]) do |found, ndx|
+      found << items[ndx] if items[ndx].to_s == label
+      found
     end.first
   end
 
   def find_by_label(label)
-    q.each do |_, ndxs|
-      candidate_ndxs = (ndxs.select {|ndx| items[ndx].to_s == label })
-      next if candidate_ndxs.empty?
-      return items[candidate_ndxs.first]
-    end
-    nil
+    q.reduce([]) do |found, (priority, ndxs)|
+      selected_ndxs = ndxs.select {|ndx| items[ndx] == label }
+      found.concat(selected_ndxs.map {|ndx| items[ndx] })
+    end.first
   end
 
   def empty?
     priorities.empty?
   end
 
+  def clear
+    items.clear
+    priorities.clear
+    q.clear
+  end
+
 private
   def pull_item(priority)
+    return nil if empty?
     item_ndx = q[priority].shift
-    item = items[item_ndx]
-    if q[priority].empty?
-      q.delete(priority)
-      priorities.delete(priority)
-    end
-    item
+    remove(priority) if q[priority].empty?
+    items[item_ndx]
+  end
+
+  def remove(priority)
+    q.delete(priority)
+    priorities.delete(priority)
   end
 end

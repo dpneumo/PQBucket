@@ -100,28 +100,28 @@ class PriorityQueueTest < Minitest::Test
     assert_equal Hash.new, @pq.q
   end
 
-  def test_find_max_returns_nil_for_empty_queue
-    assert_nil @pq.find_max
+  def test_find_highest_returns_nil_for_empty_queue
+    assert_nil @pq.find_highest
   end
 
-  def test_find_max_returns_the_highest_priority_item
+  def test_find_highest_returns_the_highest_priority_item
     @pq.insert('b', 2)
     @pq.insert('x', 5)
-    assert_equal 'x', @pq.find_max
+    assert_equal 'x', @pq.find_highest
     @pq.pull_highest
-    assert_equal 'b', @pq.find_max
+    assert_equal 'b', @pq.find_highest
   end
 
-  def test_find_min_returns_nil_for_empty_queue
-    assert_nil @pq.find_min
+  def test_find_lowest_returns_nil_for_empty_queue
+    assert_nil @pq.find_lowest
   end
 
-  def test_find_min_returns_the_lowest_priority_item
+  def test_find_lowest_returns_the_lowest_priority_item
     @pq.insert('b', 2)
     @pq.insert('x', 5)
-    assert_equal 'b', @pq.find_min
+    assert_equal 'b', @pq.find_lowest
     @pq.pull_lowest
-    assert_equal 'x', @pq.find_min
+    assert_equal 'x', @pq.find_lowest
   end
 
   def test_returns_nil_for_empty_queue
@@ -129,23 +129,23 @@ class PriorityQueueTest < Minitest::Test
     assert_equal true, @pq.empty?
   end
 
-  def test_finds_items_by_priority
+  def test_find_by_priority_returns_first_inserted_with_that_priority
     @pq.insert('b', 2)
     @pq.insert('z', 3)
     @pq.insert('w', 3)
     @pq.insert('r', 10)
-    assert_equal ["z", "w"], @pq.find_by_priority(3)
+    assert_equal "z", @pq.find_by_priority(3)
   end
 
-  def test_finds_by_priority_returns_empty_array_if_items_not_found
+  def test_find_by_priority_returns_nil_if_item_not_found
     @pq.insert('b', 2)
     @pq.insert('z', 3)
     @pq.insert('w', 3)
     @pq.insert('r', 10)
-    assert_equal [], @pq.find_by_priority(4)
+    assert_nil @pq.find_by_priority(4)
   end
 
-  def test_finds_item_by_label_and_priority
+  def test_find_by_label_and_priority_returns_item_with_label_and_priority
     @pq.insert('b', 2)
     @pq.insert('z', 3)
     @pq.insert('w', 3)
@@ -153,7 +153,7 @@ class PriorityQueueTest < Minitest::Test
     assert_equal "w", @pq.find_by_label_and_priority('w', 3)
   end
 
-  def test_finds_by_label_and_priority_returns_nil_if_item_not_found
+  def test_find_by_label_and_priority_returns_nil_if_item_not_found
     @pq.insert('b', 2)
     @pq.insert('z', 3)
     @pq.insert('w', 3)
@@ -161,7 +161,7 @@ class PriorityQueueTest < Minitest::Test
     assert_nil @pq.find_by_label_and_priority('a', 3)
   end
 
-  def test_finds_item_by_label
+  def test_find_by_label_returns_first_inserted_item_with_label
     @pq.insert('b', 2)
     @pq.insert('z', 3)
     @pq.insert('w', 3)
