@@ -1,8 +1,8 @@
 require 'benchmark'
-require_relative '../lib/priority_queue_bucket'
+require_relative '../lib/pq_bucket'
 require_relative '../lib/item'
 
-PQvariant = 'PriorityQueueBucket'
+PQvariant = 'PQBucket'
 PQsizes = [100, 1000, 10000, 100000, 1000000]
 MaxPriority = 100
 SampleSize = 100
@@ -16,7 +16,7 @@ end
 
 puts "Priority Queue Variant: #{PQvariant}"
 
-pq = PriorityQueueBucket.new
+pq = PQBucket.new
 PQsizes.each do |qsize|
   puts "\n"
   puts "Queue size: #{qsize}"

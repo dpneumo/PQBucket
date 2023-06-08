@@ -1,4 +1,4 @@
-Priority Queue Variant: PriorityQueueBucket
+Priority Queue Variant: PQBucket
 
 Queue size: 100
 SampleSize: 100

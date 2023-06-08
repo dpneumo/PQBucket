@@ -1,7 +1,7 @@
 # This is a bucket queue
 # Items in the queue can be required to be unique
 # insert: O(1), find_highest: O(#priorities), pull_highest: O(#priorities)
-class PriorityQueueBucket
+class PQBucket
   attr_reader :items, :priorities, :q
 
   def initialize
@@ -24,7 +24,7 @@ class PriorityQueueBucket
     pull_item(@priorities.last)
   end
 
-  #Note: Returns FIRST item inserted at HIGHEST Priority - FIFO
+  #NOTE: Returns FIRST item inserted at HIGHEST Priority - FIFO
   def find_highest
     return nil if empty?
     highest_priority = @q[@priorities.last]
@@ -54,7 +54,7 @@ class PriorityQueueBucket
     pull_item(@priorities.first)
   end
 
-  #Note: Returns FIRST item inserted at LOWEST Priority - FIFO
+  #NOTE: Returns FIRST item inserted at LOWEST Priority - FIFO
   def find_lowest
     return nil if empty?
     lowest_priority = q[@priorities.first]

@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 require_relative 'test_helper'
-require_relative '../lib/priority_queue_bucket'
+require_relative '../lib/pq_bucket'
 require_relative '../lib/item'
 
-class PriorityQueueBucketTest < Minitest::Test
+class PQBucketTest < Minitest::Test
   def setup
-    @pq = PriorityQueueBucket.new
+    @pq = PQBucket.new
     @pq.insert(Item.new(label: 'b', priority: 2))
     @pq.insert(Item.new(label: 'x', priority: 6))
     @pq.insert(Item.new(label: 'y', priority: 6))
@@ -20,12 +20,6 @@ class PriorityQueueBucketTest < Minitest::Test
     assert_equal 'm', @pq.pull_highest.label
   end
 
-  def test_correctly_inserts_multiple_items
-    expect = {10=>["r"], 6=>["x", "y"], 3=>["z", "w"], 2=>["b"]}
-    assert_equal expect, @pq.to_s
-    assert ! @pq.empty?
-  end
-
   def test_correctly_pulls_highest_items_returning_nil_when_empty
     assert_equal 'r', @pq.pull_highest.label
     assert_equal 'x', @pq.pull_highest.label
@@ -37,8 +31,7 @@ class PriorityQueueBucketTest < Minitest::Test
   end
 
   def test_find_highest_returns_nil_for_empty_queue
-    pq = PriorityQueueBucket.new
-    assert_nil pq.find_highest
+    assert_nil PQBucket.new.find_highest
   end
 
   def test_find_highest_returns_the_highest_priority_item
@@ -48,7 +41,7 @@ class PriorityQueueBucketTest < Minitest::Test
   end
 
   def test_identifies_empty_queue
-    pq = PriorityQueueBucket.new
+    pq = PQBucket.new
     assert pq.empty?
     pq.insert(Item.new(label:'T', priority: 5))
     refute pq.empty?
@@ -68,6 +61,11 @@ class PriorityQueueBucketTest < Minitest::Test
   end
 
 # Extensions tests
+  def test_returns_string_representation_of_queue
+    expect = {10=>["r"], 6=>["x", "y"], 3=>["z", "w"], 2=>["b"]}
+    assert_equal expect, @pq.to_s
+  end
+
   def test_correctly_pulls_lowest_items_returning_nil_when_empty
     assert_equal 'b', @pq.pull_lowest.label
     assert_equal 'z', @pq.pull_lowest.label
@@ -89,7 +87,7 @@ class PriorityQueueBucketTest < Minitest::Test
   end
 
   def test_find_lowest_returns_nil_for_empty_queue
-    pq = PriorityQueueBucket.new
+    pq = PQBucket.new
     assert_nil pq.find_lowest
   end
 
@@ -127,13 +125,13 @@ class PriorityQueueBucketTest < Minitest::Test
 
 # Implementation tests
   def test_inits_priorities_to_empty_array
-    pq = PriorityQueueBucket.new
+    pq = PQBucket.new
     assert_equal Array, pq.priorities.class
     assert_empty pq.priorities
   end
 
   def test_inits_q_to_an_empty_hash
-    pq = PriorityQueueBucket.new
+    pq = PQBucket.new
     assert_equal Hash, pq.q.class
     assert_empty pq.q
   end
@@ -146,7 +144,7 @@ class PriorityQueueBucketTest < Minitest::Test
     assert ! @pq.empty?
   end
 
-  def test_clear_empties_the_priority_queue_bucket
+  def test_clear_empties_the_pq_bucket
     @pq.clear
     assert @pq.q.empty?
   end

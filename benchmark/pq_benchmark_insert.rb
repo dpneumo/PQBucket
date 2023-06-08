@@ -1,8 +1,8 @@
-require_relative '../lib/priority_queue_bucket'
+require_relative '../lib/pq_bucket'
 require_relative '../lib/item'
 
 class InsertBenchmark
-  PQ = PriorityQueueBucket
+  PQ = PQBucket
   PQsizes = [100, 1000, 10000, 100000, 1000000]
   MaxPriority = 100
   PQInsertSamples = 30

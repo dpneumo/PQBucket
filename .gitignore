@@ -10,6 +10,11 @@
 /test/version_tmp/
 /tmp/
 
+# App specific
+benchmark_results.txt
+*.csv
+*.ods
+
 # Used by dotenv library to load environment variables.
 # .env
 

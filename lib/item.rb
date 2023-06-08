@@ -10,5 +10,5 @@ class Item
   end
 
   def <=>(other) =  @priority <=> other.priority
-  def to_s =        @label
+  def to_s       =  @label
 end
